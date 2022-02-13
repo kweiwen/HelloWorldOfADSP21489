@@ -12,13 +12,15 @@ int main(void)
 	Init_SDRAM();
 	initDAI();
 
+	std::cout << "Hello, World!" << std::endl;
+
 	int flag = 0;
 
 	while(1)
 	{
-		Delay_Cycles(30000000);
+		Delay_Cycles(50000000);
 		SRU2(HIGH, DPI_PB14_I);
-		Delay_Cycles(30000000);
+		Delay_Cycles(50000000);
 		SRU2(LOW, DPI_PB14_I);
 
 		if(flag)
