@@ -1,5 +1,5 @@
 /*
-** adi_initialize.c source file generated on February 13, 2022 at 17:01:19.
+** adi_initialize.c source file generated on February 13, 2022 at 19:25:31.
 **
 ** Copyright (C) 2000-2022 Analog Devices Inc., All Rights Reserved.
 **

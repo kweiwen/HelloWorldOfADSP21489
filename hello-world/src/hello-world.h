@@ -1,10 +1,10 @@
 /*****************************************************************************
- * HelloWorldOfADSP_21489.h
+ * hello-world.h
  *****************************************************************************/
 
-#ifndef __HELLOWORLDOFADSP_21489_H__
-#define __HELLOWORLDOFADSP_21489_H__
+#ifndef __HELLO_WORLD_H__
+#define __HELLO_WORLD_H__
 
 /* Add your custom header content here */
 
-#endif /* __HELLOWORLDOFADSP_21489_H__ */
+#endif /* __HELLO_WORLD_H__ */
