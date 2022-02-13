@@ -73,9 +73,6 @@ void initDAI(void)
 	sysreg_bit_clr( sysreg_FLAGS, (FLG4O) );
 
 
-	sysreg_bit_clr(sysreg_FLAGS, FLG4);
-//	sysreg_bit_set(sysreg_FLAGS, FLG4);
-
 //	{
 //		if( LED_OFF == bState ) 	{ sysreg_bit_clr(sysreg_FLAGS, FLG4); }
 //		else if( LED_ON == bState )	{ sysreg_bit_set(sysreg_FLAGS, FLG4); }
