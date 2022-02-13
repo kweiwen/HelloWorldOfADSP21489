@@ -1,6 +1,5 @@
 #include "initSRU.h"
 #include <sru.h>
-#include <sysreg.h>
 
 static void clearDAIpins(void)
 {
@@ -38,26 +37,26 @@ static void clearDAIpins(void)
  * Tie the pin buffer enable inputs LOW for all DAI pins so
  * that they are always input pins.  This is GROUP F.
  */
-    SRU(LOW, PBEN01_I);
-    SRU(LOW, PBEN02_I);
-    SRU(LOW, PBEN03_I);
-    SRU(LOW, PBEN04_I);
-    SRU(LOW, PBEN05_I);
-    SRU(LOW, PBEN06_I);
-    SRU(LOW, PBEN07_I);
-    SRU(LOW, PBEN08_I);
-    SRU(LOW, PBEN09_I);
-    SRU(LOW, PBEN10_I);
-    SRU(LOW, PBEN11_I);
-    SRU(LOW, PBEN12_I);
-    SRU(LOW, PBEN13_I);
-    SRU(LOW, PBEN14_I);
-    SRU(LOW, PBEN15_I);
-    SRU(LOW, PBEN16_I);
-    SRU(LOW, PBEN17_I);
-    SRU(LOW, PBEN18_I);
-    SRU(LOW, PBEN19_I);
-    SRU(LOW, PBEN20_I);
+    SRU2(LOW, PBEN01_I);
+    SRU2(LOW, PBEN02_I);
+    SRU2(LOW, PBEN03_I);
+    SRU2(LOW, PBEN04_I);
+    SRU2(LOW, PBEN05_I);
+    SRU2(LOW, PBEN06_I);
+    SRU2(LOW, PBEN07_I);
+    SRU2(LOW, PBEN08_I);
+    SRU2(LOW, PBEN09_I);
+    SRU2(LOW, PBEN10_I);
+    SRU2(LOW, PBEN11_I);
+    SRU2(LOW, PBEN12_I);
+    SRU2(LOW, PBEN13_I);
+    SRU2(LOW, PBEN14_I);
+    SRU2(LOW, PBEN15_I);
+    SRU2(LOW, PBEN16_I);
+    SRU2(LOW, PBEN17_I);
+    SRU2(LOW, PBEN18_I);
+    SRU2(LOW, PBEN19_I);
+    SRU2(LOW, PBEN20_I);
 }
 
 
@@ -65,18 +64,7 @@ void initDAI(void)
 {
     clearDAIpins();
 
-	SRU(FLAG4_O, DPI_PB14_I);
-	SRU(HIGH, DPI_PBEN14_I);
-	/* setting flag pins as outputs */
-	sysreg_bit_set( sysreg_FLAGS, (FLG4O) );
-	/* clearing flag pins */
-	sysreg_bit_clr( sysreg_FLAGS, (FLG4O) );
-
-
-//	{
-//		if( LED_OFF == bState ) 	{ sysreg_bit_clr(sysreg_FLAGS, FLG4); }
-//		else if( LED_ON == bState )	{ sysreg_bit_set(sysreg_FLAGS, FLG4); }
-//		else	/* toggle */		{ sysreg_bit_tgl(sysreg_FLAGS, FLG4); }
-//	}
+	SRU2(LOW, DPI_PB14_I);
+	SRU2(HIGH, DPI_PBEN14_I);
 }
 
