@@ -1,5 +1,5 @@
 /*
-** ADSP-21489 startup code generated on Feb 13, 2022 at 17:01:20.
+** ADSP-21489 startup code generated on Feb 13, 2022 at 17:08:13.
 */
 /*
 ** Copyright (C) 2000-2021 Analog Devices Inc., All Rights Reserved.
