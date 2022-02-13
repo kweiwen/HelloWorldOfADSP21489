@@ -3,9 +3,6 @@
 #include "sysreg.h"
 #include "init_PLL_SDRAM.h"
 
-#define PLL_MULT			PLLM16
-#define RDIV				(0x4D8)
-
 /*******************************************************************
 *   Function:    Init_PLL
 *   Description: initializes the PLL registers
@@ -39,10 +36,11 @@ void Init_PLL(void)
 	// Step 6 - wait for dividers to stabilize
 	for(i=0;i<16;i++);
 
-	// Step 7 - set the required PLLM and INDIV values here  and enter the bypass mode
+	// Step 7 - set the required PLLM and INDIV values here and enter the bypass mode
+	//PLLM = 16, INDIV = 0, fVCO= 2 * PLLM * CLKIN = 2 * 16 * 25 MHz = 800 MHz
 	temp = *pPMCTL;
-	temp&=~ (INDIV | PLLM63);
-	temp|= (PLL_MULT| PLLBP);
+	temp &=~ (INDIV | PLLM63);
+	temp |= (PLLM16 | PLLBP);
 	*pPMCTL = temp;
 
 	// Step 8 - wait for the PLL to lock
@@ -57,13 +55,10 @@ void Init_PLL(void)
 	for(i=0;i<16;i++);
 
 	// Step 11 - set the required values of PLLD(=2) and SDCKR (=2.5 for ADSP-21489 and 2 for ADSP-21479) here
+	// fCCLK = fVCO/PLLD = 800/2 = 400 MHz, fSDCLK = fCCLK/SDCKR = 400/2.5 = 160 MHz
 	temp=*pPMCTL;
 	temp&=~(PLLD16 | 0x1C0000 );
-	#ifdef __ADSP21489__
 	temp|= (SDCKR2_5 | PLLD2 | DIVEN);
-	#elif __ADSP21479__
-	temp|= (SDCKR2 | PLLD2 | DIVEN);
-	#endif
 	*pPMCTL=temp;
 
 	// Step 12 - wait for the dividers to stabilize
@@ -77,6 +72,35 @@ void Init_PLL(void)
 *******************************************************************/
 void Init_SDRAM(void)
 {
+	// SDRAM memory on DUT - W9864G6JH-6
+	// Parameters
+	// Configuration       - 4M x 16(1M x 16 x 4)
+	// CAS Latency         - 3
+	// Row addressing      - A0:A11
+	// Column addressing   - A0:A7
+	// No of Banks         - 4
+
+	// tRAS - 42ns
+	// tRCD - 15ns
+	// tRP  - 15ns
+	// tRC  - 60ns
+	// tWR  - (2CLK)
+
+	// For the 160 MHz case, tSDCLK = 1/160 MHz = 6.25ns
+	// CAS Latency = 3
+	// tRAS        = 42 / 6.25 = 7  (6.72)
+	// tRCD        = 15 / 6.25 = 3  (2.4)
+	// tRP         = 15 / 6.25 = 3  (2.4)
+	// tRC         = 60 / 6.25 = 10 (9.6)
+	// tWR                     = 2
+	// fSDCLK                  = 160 MHz
+	// tREF                    =  64 ms
+	// NRA                     = 2^12 = 4096
+
+	// RDIV = ((f SDCLK X t REF)/NRA) - (t RAS + t RP)
+	// RDIV = (((160 X 10^6 x 64 x 10^-3) / 4096) - (7 + 3))
+	// RDIV = 2630.625 = 2631 = 0xA47
+
 	int nValue = 0;
 
     *pSYSCTL |= MSEN;
@@ -85,60 +109,16 @@ void Init_SDRAM(void)
     *pEPCTL |= B0SD;
     *pEPCTL &= (~(B1SD|B2SD|B3SD));
 
-    nValue = RDIV;
+    nValue = 0xA47;
     nValue |= SDROPT | BIT_17;	// Enabling SDRAM read optimization
 								// Setting the Modify to 1
 	*pSDRRC = nValue;
 
 	// Programming SDRAM control register
 	nValue = 0;
-#ifdef __ADSP21489__
-	nValue |= (SDCL3|SDTRAS7|SDTRP3|SDCAW9|SDPSS|SDTWR2|SDTRCD3|SDRAW13|X16DE);
-#elif __ADSP21479__
-	nValue |= (SDCL3|SDTRAS6|SDTRP3|SDCAW9|SDPSS|SDTWR2|SDTRCD3|SDRAW13|X16DE);
-#endif
+	nValue |= (SDCL3|SDPSS|SDTRAS7|SDTRCD3|SDTRP3|SDTWR2|SDRAW12|SDCAW8|X16DE);
 	*pSDCTL = nValue;
 }
-
-
-/*******************************************************************
-*   Function:    Init_SRAM
-*   Description: initializes the SRAM registers
-*******************************************************************/
-void Init_SRAM(void)
-{
-	int nValue = 0;
-
-    *pSYSCTL |= MSEN;
-
-}
-
-/*******************************************************************
-*   Function:    Init_AMI
-*   Description: initializes the AMI interface
-*******************************************************************/
-void Init_AMI(void)
-{
-	int sysctl = 0x0;
-	int amictl = 0x0;
-
-	sysctl = *pSYSCTL;
-	sysctl |= EPDATA32;
-	*pSYSCTL = sysctl;
-
-	// Flash is on Bank1
-	// Programming maximum wait states
-	amictl = (AMIEN | BW8 | WS31);
-	*pAMICTL1 = amictl;
-
-	// SRAM is connected on Bank 3
-	// SRAM part used - IS61WV102416BLL
-	// As per datasheet access time is 10 ns, 8ns
-	// Programming waitstates = 2
-	amictl = (AMIEN | BW16 | WS2);
-	*pAMICTL3 = amictl;
-}
-
 
 /*******************************************************************
 *   Function:    Delay
@@ -152,3 +132,6 @@ void Delay(const int n)
 		asm("nop;");
 	}
 }
+
+
+
