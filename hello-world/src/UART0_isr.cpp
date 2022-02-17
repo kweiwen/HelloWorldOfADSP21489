@@ -21,7 +21,7 @@ char welcomeMessage[] =
 		"\f"
 		"Welcome!"
 		"\n"
-		"Copyright (c) 2021 Lava Music, Inc.  All rights reserved."
+		"Copyright (c) 2022 REMORA. All rights reserved."
 		" This software is proprietary and confidential.  By using this software you agree"
 		" to the terms of the associated Lava Music License Agreement.  Enjoy!"
 		"\n"
