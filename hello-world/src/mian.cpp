@@ -25,12 +25,12 @@ int main(void)
 	Init_SDRAM();
 	initDAI();
 
-   	SRU2(UART0_TX_O, DPI_PB08_I);	/* UART TX signal is connected to DPI pin 9 */
-	SRU2(HIGH, DPI_PBEN08_I);
+   	SRU2(UART0_TX_O, DPI_PB07_I);	/* UART TX signal is connected to DPI pin 9 */
+	SRU2(HIGH, DPI_PBEN07_I);
 
-	SRU2(DPI_PB07_O, UART0_RX_I);	/* connect the pin buffer output signal to the UART0 RX */
-	SRU2(LOW, DPI_PB07_I);
-	SRU2(LOW, DPI_PBEN07_I);			/* disable DPI pin10 as input */
+	SRU2(DPI_PB08_O, UART0_RX_I);	/* connect the pin buffer output signal to the UART0 RX */
+	SRU2(LOW, DPI_PB08_I);
+	SRU2(LOW, DPI_PBEN08_I);			/* disable DPI pin10 as input */
 
 	SRU2(LOW, DPI_PB14_I);
 	SRU2(HIGH, DPI_PBEN14_I);
@@ -43,6 +43,8 @@ int main(void)
 	std::cout << "Hello, World!" << std::endl;
 
 	int flag = 0;
+	int buffer_cntr = 0;
+
 
 	while(1)
 	{
@@ -50,8 +52,14 @@ int main(void)
 		SRU2(HIGH, DPI_PB14_I);
 		Delay_Cycles(10000000);
 		SRU2(LOW, DPI_PB14_I);
-		Delay_Cycles(10000000);
+
+		Delay_Cycles(1000000);
 		DBG(TEST);
+		char temp = buffer_cntr + '0';
+		DBG(&temp);
+		Delay_Cycles(1000000);
+
+		buffer_cntr++;
 
 		if(flag)
 		{
