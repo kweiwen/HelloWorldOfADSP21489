@@ -1,7 +1,8 @@
 #include "UART0_isr.h"
 
-#include <cdef21479.h>
-#include <def21479.h>
+#include <cdef21489.h>
+#include <def21489.h>
+#include <sru.h>
 #include <stdio.h>					/* Get declaration of puts and definition of NULL. */
 #include <assert.h>    				/* Get the definition of support for standard C asserts. */
 #include <services/int/adi_int.h>  	/* Interrupt Handler API header. */
@@ -38,7 +39,7 @@ char errorMessage[] =
 
 void initUART(void)
 {
-   	*pPICR2 &= ~(0x7C00); /* Sets the UART0 receive interrupt to P14 */
+   	*pPICR2 &= ~(0x1F<<10); /* Sets the UART0 receive interrupt to P14 */
    	*pPICR2 |= (0x13<<10);
 
    	*pUART0LCR=0;
@@ -49,11 +50,10 @@ void initUART(void)
 	*pUART0LCR = UARTDLAB;  /* enables access to Divisor register to set baud rate */
 
 	/* Baud rate = PCLK/(16 * divisor), divisor value can be from 1 to 65,536 */
-	/* 133Mhz = PCLK */
-	/* 0x01B0 = 432 for divisor value and gives a baud rate of 19200 for core clock 266MHz */
-	/* 0x0048 = 72 for divisor value and gives a baud rate of 115200 for core clock 266MHz */
-	/* 0x000E = 14 for divisor value and gives a baud rate of 576000 for core clock 266MHz */
-	*pUART0DLL = 0x0E;
+	/* 200Mhz = PCLK */
+	/* 0x028B = 651.04 for divisor value and gives a baud rate of 19200 for core clock 400MHz */
+	/* 0x006C = 108 for divisor value and gives a baud rate of 115200 for core clock 400MHz */
+	*pUART0DLL = 0x6C;
     *pUART0DLH = 0x00;
 
     /* Configures UART0 LCR */

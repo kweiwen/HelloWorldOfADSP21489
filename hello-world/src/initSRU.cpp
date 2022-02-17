@@ -63,8 +63,5 @@ static void clearDAIpins(void)
 void initDAI(void)
 {
     clearDAIpins();
-
-	SRU2(LOW, DPI_PB14_I);
-	SRU2(HIGH, DPI_PBEN14_I);
 }
 
