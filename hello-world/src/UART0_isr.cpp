@@ -6,7 +6,7 @@
 #include <assert.h>    				/* Get the definition of support for standard C asserts. */
 #include <services/int/adi_int.h>  	/* Interrupt Handler API header. */
 
-#include "ADDS_21479_EzKit.h"
+#include "ADDS_21489_EzKit.h"
 
 char uart_buffer[UART_BUFFER_SIZE] = {0};
 volatile int commandReady = 0;
