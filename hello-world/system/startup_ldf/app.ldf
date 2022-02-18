@@ -1,5 +1,5 @@
 /*
-** ADSP-21489 linker description file generated on Feb 15, 2022 at 14:46:39.
+** ADSP-21489 linker description file generated on Feb 18, 2022 at 18:57:55.
 */
 /*
 ** Copyright (C) 2000-2021 Analog Devices Inc., All Rights Reserved.
@@ -15,7 +15,7 @@
 ** placed within these sections are preserved when this file is re-generated.
 **
 ** Product      : CrossCore Embedded Studio
-** Tool Version : 6.2.2.7
+** Tool Version : 6.2.2.8
 */
 
 ARCHITECTURE(ADSP-21489)
@@ -173,7 +173,9 @@ MEMORY
    mem_sdram_nwco          { TYPE(PM RAM SYNCHRONOUS) START(0x00280000) END(0x002FFFFF) WIDTH(16) }
    mem_sdram_dmda          { TYPE(DM RAM SYNCHRONOUS) START(0x00480000) END(0x0097FFFF) WIDTH(16) }
    mem_sdram_pmda          { TYPE(DM RAM SYNCHRONOUS) START(0x00980000) END(0x00AFFFFF) WIDTH(16) }
-  
+   mem_sram                { TYPE(DM RAM ASYNCHRONOUS) START(0x0C000000) END(0x0C07FFFF) WIDTH(16) }
+   mem_flash               { TYPE(DM RAM ASYNCHRONOUS) START(0x04000000) END(0x043FFFFF) WIDTH(8) }
+   
    /*$VDSG<insert-new-memory-segments>                          */
    /* Text inserted between these $VDSG comments will be preserved */
    /*$VDSG<insert-new-memory-segments>                          */
@@ -810,6 +812,37 @@ PROCESSOR p0
          /*$VDSG<insert-input-sections-at-the-start-of-dxe_sdram_stack_and_heap>  */
          
       } > mem_sdram_dmda
+      
+      dxe_flash
+      {
+         
+         /*$VDSG<insert-input-sections-at-the-start-of-dxe_flash>  */
+         /* Text inserted between these $VDSG comments will be preserved */
+         /*$VDSG<insert-input-sections-at-the-start-of-dxe_flash>  */
+         
+         INPUT_SECTIONS( $OBJS_LIBS(seg_flash) )
+         
+         /*$VDSG<insert-input-sections-at-the-end-of-dxe_flash>  */
+         /* Text inserted between these $VDSG comments will be preserved */
+         /*$VDSG<insert-input-sections-at-the-end-of-dxe_flash>  */
+         
+      } > mem_flash
+      
+      dxe_sram
+      {
+         
+         /*$VDSG<insert-input-sections-at-the-start-of-dxe_sram>  */
+         /* Text inserted between these $VDSG comments will be preserved */
+         /*$VDSG<insert-input-sections-at-the-start-of-dxe_sram>  */
+         
+         INPUT_SECTIONS( $OBJS_LIBS(seg_sram) )
+         
+         /*$VDSG<insert-input-sections-at-the-end-of-dxe_sram>  */
+         /* Text inserted between these $VDSG comments will be preserved */
+         /*$VDSG<insert-input-sections-at-the-end-of-dxe_sram>  */
+         
+      } > mem_sram
+      
       
       /*$VDSG<insert-new-sections-at-the-end>                   */
       /* Text inserted between these $VDSG comments will be preserved */
