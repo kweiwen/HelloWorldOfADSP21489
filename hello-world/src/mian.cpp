@@ -29,7 +29,6 @@ extern volatile int commandReady;
 extern char uart_buffer[];
 int main(void)
 {
-
  	Init_PLL();
 	Init_SDRAM();
 	initDAI();
@@ -45,15 +44,13 @@ int main(void)
 	std::cout << "Hello, World!" << std::endl;
 	DBG(welcomemessage);
 
-
-
 	int flag = 0;
 	while(1)
 	{
-		//Delay_Cycles(50000000);
-		//_Run_LED_On();
-		//Delay_Cycles(50000000);
-		//_Run_LED_Off();
+		Delay_Cycles(50000000);
+		_Run_LED_On();
+		Delay_Cycles(50000000);
+		_Run_LED_Off();
 
 		if(flag)
 		{
