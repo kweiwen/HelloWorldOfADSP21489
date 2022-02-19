@@ -10,7 +10,6 @@
 #include "ADDS_21489_EzKit.h"
 //manchiu git hub test 1
 //manchiu git hub test 2
-//manchiu git hub test 3
 char TEST[] =
 {
 		"\f"
