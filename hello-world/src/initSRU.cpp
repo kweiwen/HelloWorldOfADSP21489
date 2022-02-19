@@ -1,5 +1,6 @@
 #include "initSRU.h"
 #include <sru.h>
+#include <Cdef21489.h>
 
 static void clearDAIpins(void)
 {
@@ -63,5 +64,59 @@ static void clearDAIpins(void)
 void initDAI(void)
 {
     clearDAIpins();
+
+    SRU(HIGH,PBEN02_I);//24.576MHZ ADUIO CLK CRISTAL
+
+    SRU(HIGH,PBEN14_I);//MCLK
+    SRU(HIGH,PBEN11_I);//LRCK
+    SRU(HIGH,PBEN08_I);//BLCK
+    SRU(HIGH,PBEN06_I);//SDATA OUT SPORT1_DA_O
+    SRU(HIGH,PBEN10_I);//SDATA OUT SPORT1_DB_O
+
+    //MCLK
+    SRU(DAI_PB02_O, DAI_PB14_I);
+
+    //BCLK's
+    SRU(DAI_PB08_O, SPORT0_CLK_I);
+
+    //LRCLK's
+    SRU(DAI_PB11_O, SPORT0_FS_I);
+
+    //SDATA IN
+    SRU(DAI_PB09_O, SPORT1_DA_I);	//SDATA0 CN1≤Â≤€£¨IN A/B
+    SRU(DAI_PB05_O, SPORT1_DB_I);	//SDATA1 CN2≤Â≤€£¨IN C/D
+
+    //SDATA OUT
+    SRU(HIGH, PBEN06_I);			//SDATA2 CN3≤Â≤€£¨OUT1/2
+    SRU(SPORT0_DA_O, DAI_PB06_I);   /*SPORT1 DA (TX) */
+    SRU(HIGH, PBEN10_I);			//SDATA3 CN4≤Â≤€£¨OUT1/2
+    SRU(SPORT0_DB_O, DAI_PB10_I);   /*SPORT0 DB (TX) */
+
+    //SRU(DAI_PB02_O, PCG_EXTA_I);  //—°‘ÒÕ‚≤ø ±÷”‘¥ ‰»ÎµΩPGC£¨24.576MHZ crystal to PCG_EXTA_I (CLK)
+
+    //RUN LED
+	SRU2(LOW, DPI_PB14_I);
+	SRU2(HIGH, DPI_PBEN14_I);
+
+	//CDDEC RESET
+    SRU2(LOW, DPI_PB13_I);
+	SRU2(HIGH, DPI_PBEN13_I);
+
+	//UART0
+	SRU2(UART0_TX_O,DPI_PB09_I); // UART transmit signal is connected to DPI pin8 /MOSI
+	SRU2(HIGH,DPI_PBEN09_I);
+
+	SRU2(DPI_PB10_O,UART0_RX_I); // connect the pin buffer output signal to the UART0 receive / MISO
+	SRU2(LOW,DPI_PB10_I);
+	SRU2(LOW,DPI_PBEN10_I);      // disables DPI pin7 as input
+
+	/*
+    SRU(LOW, DPI_PB08_I);
+	SRU(HIGH, DPI_PBEN08_I);
+
+    SRU(LOW, DPI_PB07_I);
+	SRU(HIGH, DPI_PBEN07_I);
+	*/
+
 }
 

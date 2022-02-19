@@ -1,13 +1,24 @@
 #include "UART0_isr.h"
-
 #include <cdef21489.h>
 #include <def21489.h>
-#include <sru.h>
 #include <stdio.h>					/* Get declaration of puts and definition of NULL. */
 #include <assert.h>    				/* Get the definition of support for standard C asserts. */
 #include <services/int/adi_int.h>  	/* Interrupt Handler API header. */
+#include <stdint.h>    /* Get definition of uint32_t. */
 
-#include "ADDS_21489_EzKit.h"
+
+#ifndef UART_BUFFER_SIZE
+	#define UART_BUFFER_SIZE (8)
+#endif
+
+#ifndef UART_BUFFER_MASK
+	#define UART_BUFFER_MASK (UART_BUFFER_SIZE - 1)
+#endif
+
+#ifndef PCLK
+	#define PCLK	200e6
+#endif
+
 
 char uart_buffer[UART_BUFFER_SIZE] = {0};
 volatile int commandReady = 0;
@@ -15,15 +26,12 @@ volatile int isCommandProcessing = 0;
 volatile int uart_buffer_cntr = 0;
 volatile int uart_buffer_ready = 0;
 volatile int timer_isr_count = 0;
+static void Init_UART_Baud(int baud,int Len,char Party,int Stop);
 
 char welcomeMessage[] =
 {
 		"\f"
 		"Welcome!"
-		"\n"
-		"Copyright (c) 2021 Lava Music, Inc.  All rights reserved."
-		" This software is proprietary and confidential.  By using this software you agree"
-		" to the terms of the associated Lava Music License Agreement.  Enjoy!"
 		"\n"
 };
 
@@ -39,31 +47,34 @@ char errorMessage[] =
 
 void initUART(void)
 {
-   	*pPICR2 &= ~(0x1F<<10); /* Sets the UART0 receive interrupt to P14 */
+   	*pPICR2 &= ~(0x7C00); /* Sets the UART0 receive interrupt to P14 */
    	*pPICR2 |= (0x13<<10);
 
    	*pUART0LCR=0;
 
     *pUART0IER= UARTRBFIE;  /* enables UART0 receive interrupt */
 
+    Init_UART_Baud(115200, 8,'N',1);/* Sets the Baud rate, word length, parity, stop bits for UART0 */
+
 	/* Sets the Baud rate for UART0 */
-	*pUART0LCR = UARTDLAB;  /* enables access to Divisor register to set baud rate */
+	//*pUART0LCR = UARTDLAB;  /* enables access to Divisor register to set baud rate */
 
 	/* Baud rate = PCLK/(16 * divisor), divisor value can be from 1 to 65,536 */
 	/* 200Mhz = PCLK */
-	/* 0x028B = 651.04 for divisor value and gives a baud rate of 19200 for core clock 400MHz */
-	/* 0x006C = 108 for divisor value and gives a baud rate of 115200 for core clock 400MHz */
-	*pUART0DLL = 0x6C;
-    *pUART0DLH = 0x00;
+	/* 0x01B0 = 432 for divisor value and gives a baud rate of 19200 for core clock 200MHz */
+	/* 0x006C = 108 for divisor value and gives a baud rate of 115200 for core clock 200MHz */
+	/* 0x000E = 14 for divisor value and gives a baud rate of 576000 for core clock 200MHz */
+	//*pUART0DLL = 0x6c	;//108
+    //*pUART0DLH = 0x00;
 
     /* Configures UART0 LCR */
     /* word length 8, parity enable ODD parity, Two stop bits */
-    *pUART0LCR = UARTWLS8 | UARTPEN | UARTSTB;
+    //*pUART0LCR = UARTWLS8 | UARTPEN | UARTSTB;
 
     *pUART0RXCTL = UARTEN;       /* enables UART0 in receive mode */
     *pUART0TXCTL = UARTEN;       /* enables UART0 in core driven mode */
 
-    DBG(welcomeMessage);
+    //DBG(welcomeMessage);
 }
 
 void xmitUARTmessage(char*xmit, int SIZE)
@@ -188,3 +199,72 @@ void DBG(char* input_data)
 	}
 	xmitUARTmessage(input_data, index+1);
 }
+
+
+static void Init_UART_Baud(int baud,int Len,char Party,int Stop)
+{
+	int UART_CLK = ((float)PCLK/16);
+
+	int UART0LCR_Temp = 0;
+	int DLL = (UART_CLK/baud)&0x00ff;
+	int DLH = ((UART_CLK/baud)&0xff00)<<8;
+
+	// Sets the Baud rate for UART0
+	//The fundamental timing clock of the UART module is peripheral clock/16 (PCLK/16).
+	*pUART0LCR = UARTDLAB;  //enables access to Divisor register to set bauda rate
+	*pUART0DLL = DLL;        //0x1B0 = 432 for divisor value and gives a baud rate of 19200 for peripheral clock of 133MHz
+    *pUART0DLH = DLH;
+
+    //�ֳ�
+    switch (Len){
+    case 5:
+    	UART0LCR_Temp |= UARTWLS5; //word length 5
+    	break;
+    case 6:
+    	UART0LCR_Temp |= UARTWLS6; //word length 6
+    	break;
+    case 7:
+    	UART0LCR_Temp |= UARTWLS7; //word length 7
+    	break;
+    case 8:
+    	UART0LCR_Temp |= UARTWLS8; //word length 8
+    	break;
+    default:
+    	UART0LCR_Temp |= UARTWLS8; //word length 8
+    	break;
+    };
+
+    //У��λ
+    switch (Party){
+    case 'N':
+    	UART0LCR_Temp &=  (~UARTPEN);
+    	break;
+    case 'O':
+    	UART0LCR_Temp |= UARTPEN; 				// parity enable ODD parity
+    	UART0LCR_Temp &=  (~UARTEPS);
+    	break;
+    case 'E':
+    	UART0LCR_Temp |= UARTPEN; 				// parity enable Even parity
+    	UART0LCR_Temp |= UARTEPS;
+    	break;
+    default:
+    	UART0LCR_Temp &=  (~UARTPEN);
+    	break;
+    };
+
+    //ֹͣλ
+    switch (Stop){
+    case 1:
+    	UART0LCR_Temp &=  (~UARTSTB); 	         // One stop bits
+    	break;
+    case 2:
+    	UART0LCR_Temp |=  UARTSTB; 				// Two stop bits
+    	break;
+    default:
+    	UART0LCR_Temp &=  (~UARTSTB); 	         // One stop bits
+    	break;
+    };
+
+    *pUART0LCR = UART0LCR_Temp;
+}
+
