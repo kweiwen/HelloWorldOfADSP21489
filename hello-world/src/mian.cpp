@@ -35,24 +35,31 @@ int main(void)
 	Init_SDRAM();
 	Init_PCG();
 	initDAI();
-
+	_Codec_Reset_H();
 	/* init UART and install interrupt */
 	initUART();
 	adi_int_InstallHandler(ADI_CID_P14I, UART0ISR, NULL, true);
 	adi_int_InstallHandler(ADI_CID_TMZLI, TimerISR, (void *)&timer_isr_count, true);
 
 	initSPORT();
-	adi_int_InstallHandler(ADI_CID_P3I, TalkThroughISR, 0, true);
+	adi_int_InstallHandler(ADI_CID_P3I, TalkThroughISR, 0, true); //Programmable Interrupt 3 - SPORT1 ,sport1 control register set up as a receiver in I2S
+	//adi_int_InstallHandler(ADI_CID_P6I, TalkThroughISR, 0, true);//Programmable Interrupt 3 - SPORT0
+
 
 	std::cout << "Hello, World!" << std::endl;
 	DBG(welcomemessage);
 
+	_Codec_Reset_L();
+	Delay_Cycles(10000000);//248ms,100000000 = 2480ms£¬24.8nS per Cycle
+	_Codec_Reset_H();
+
 	int flag = 0;
+
 	while(1)
 	{
-		Delay_Cycles(50000000);
+		//Delay_Cycles(50000000);
 		//Run_LED_Blink();
-		Delay_Cycles(50000000);
+		//Delay_Cycles(50000000);
 		//Run_LED_Blink();
 
 		if(flag)
@@ -77,7 +84,7 @@ int main(void)
 
 void Delay_Cycles(unsigned int delayCount)
 {
-	/* delayCount = 1 => 38ns delay */
+	/* delayCount = 1 => 24.8nS delay */
 	while(delayCount--);
 }
 

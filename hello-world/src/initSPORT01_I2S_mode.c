@@ -114,14 +114,14 @@ void initSPORT()
 
     *pCPSP1B = (unsigned int)TCB_RxBlock_B0 - OFFSET + 3;
 
-	// sport1 control register set up as a receiver in MCM
+	// sport1 control register set up as a receiver in I2S
 	// sport 1 control register SPCTL1 = 0x000C01F0
 	// externally generated SCLK1 and RFS1
-	*pSPCTL1 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SLEN32 |SPEN_B | SCHEN_B | SDEN_B; 					//<-- verdert OPMODE, SPEN_A und aus SLEN32-> SLEN24
+	*pSPCTL1 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SLEN32 |SPEN_B | SCHEN_B | SDEN_B;
 
-	// sport0 control register set up as a transmitter in MCM */
+	// sport0 control register set up as a transmitter in I2S
 	// sport 0 control register, SPCTL0 = 0x000C01F0 */
-	*pSPCTL0 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SPTRAN | SLEN32 |SPEN_B | SCHEN_B | SDEN_B;			//<-- verdert OPMODE, SPEN_A und aus SLEN32-> SLEN24
+	*pSPCTL0 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SPTRAN | SLEN32 |SPEN_B | SCHEN_B | SDEN_B;
 
 	/* SPORT2 control register set up as a transmitter in I2S for DAC3 and DAC4 */
 	/* externally generated SCLK2 and RFS2 */
