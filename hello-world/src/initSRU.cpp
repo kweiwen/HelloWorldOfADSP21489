@@ -63,28 +63,33 @@ static void clearDAIpins(void)
 
 void initDAI(void)
 {
+
     clearDAIpins();
-    SRU(LOW, DAI_PB02_I);//DAI_P2 24.576MHZ Audio CLK Crystal Input
+    SRU(LOW, DAI_PB02_I);//DAI_P2 24.576MHZ Audio CLK OSC Input
     SRU(LOW, DAI_PB09_I);//CN1 SDATA0 Input A/B
     SRU(LOW, DAI_PB05_I);//CN2 SDATA1 Input C/D
 
     SRU(HIGH,PBEN14_I);//MCLK Output
-    SRU(HIGH,PBEN11_I);//LRCK Output
-    SRU(HIGH,PBEN08_I);//BLCK Output
-    SRU(HIGH,PBEN06_I);//SDATA OUT SPORT1_DA_O
-    SRU(HIGH,PBEN10_I);//SDATA OUT SPORT1_DB_O
 
     //MCLK
     SRU(DAI_PB02_O, DAI_PB14_I);
-
+    SRU(DAI_PB02_O, PCG_EXTA_I);  //选择外部时钟源输入到PGC，24.576MHZ crystal to PCG_EXTA_I (CLK)
 
     //BCLK's
-    SRU(SPORT0_CLK_O, DAI_PB08_I);
-    SRU(SPORT0_CLK_PBEN_O,PBEN08_I);
+    SRU(HIGH,PBEN08_I);//BLCK Output
+    SRU (HIGH, DAI_PB08_I);
+    SRU (PCG_CLKA_O, DAI_PB08_I);//6.144
+    SRU (PCG_CLKA_O, SPORT0_CLK_I);
+    SRU (PCG_CLKA_O, SPORT1_CLK_I);
+    SRU (PCG_CLKA_O, SPORT2_CLK_I);
 
     //LRCLK's
-    SRU(SPORT0_FS_O,DAI_PB11_I);
-    SRU(SPORT0_FS_PBEN_O,PBEN11_I);
+    SRU(HIGH,PBEN11_I);//LRCK Output
+    SRU (HIGH, DAI_PB11_I);//96K
+    SRU (PCG_FSA_O, DAI_PB11_I);
+    SRU (PCG_FSA_O, SPORT0_FS_I);
+    SRU (PCG_FSA_O, SPORT0_FS_I);
+    SRU (PCG_FSA_O, SPORT0_FS_I);
 
     //SDATA IN
     SRU(DAI_PB09_O, SPORT1_DA_I);	//SDATA0 CN1插槽，IN A/B
@@ -96,7 +101,6 @@ void initDAI(void)
     SRU(HIGH, PBEN10_I);			//SDATA3 CN4插槽，OUT1/2
     SRU(SPORT0_DB_O, DAI_PB10_I);   /*SPORT0 DB (TX) */
 
-    //SRU(DAI_PB02_O, PCG_EXTA_I);  //选择外部时钟源输入到PGC，24.576MHZ crystal to PCG_EXTA_I (CLK)
 
     //RUN LED
 	SRU2(LOW, DPI_PB14_I);
@@ -123,4 +127,5 @@ void initDAI(void)
 	*/
 
 }
+
 

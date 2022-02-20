@@ -10,6 +10,8 @@
 #include "initSPORT01_I2S_mode.h"
 #include "SPORT1_isr.h"
 #include "blockProcess_audio.h"
+#include "init_PCG.h"
+
 
 void Delay_Cycles(unsigned int delayCount);
 void Codec_Reset(void);
@@ -31,6 +33,7 @@ int main(void)
 {
  	Init_PLL();
 	Init_SDRAM();
+	Init_PCG();
 	initDAI();
 
 	/* init UART and install interrupt */
@@ -48,9 +51,9 @@ int main(void)
 	while(1)
 	{
 		Delay_Cycles(50000000);
-		_Run_LED_On();
+		//Run_LED_Blink();
 		Delay_Cycles(50000000);
-		_Run_LED_Off();
+		//Run_LED_Blink();
 
 		if(flag)
 		{

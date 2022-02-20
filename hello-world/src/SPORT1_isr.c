@@ -13,6 +13,7 @@
  * 		     for this example: Two input buffers, and two output buffers.
 */
 #include "SPORT1_isr.h"
+#include "hw_connect.h"
 
 /* Counter to choose which buffer to process */
 volatile int buffer_cntr = 1;
@@ -33,9 +34,9 @@ void TalkThroughISR(uint32_t iid, void* handlerArg)
 {
 //    if(isProcessing)
 //        ProcessingTooLong();
-
     /*Increment the block pointer */
     buffer_cntr++;
     buffer_cntr %= 2;
     inputReady = 1;
+	Run_LED_Blink();
 }
