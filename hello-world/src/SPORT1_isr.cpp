@@ -12,6 +12,8 @@
  * USAGE:    This file contains SPORT1 Interrupt Service Routine. Four buffers are used
  * 		     for this example: Two input buffers, and two output buffers.
 */
+#include <sys/platform.h>
+#include <iostream>
 #include "SPORT1_isr.h"
 #include "hw_connect.h"
 
@@ -39,4 +41,5 @@ void TalkThroughISR(uint32_t iid, void* handlerArg)
     buffer_cntr %= 2;
     inputReady = 1;
 	Run_LED_Blink();
+	std::cout << "TalkThroughISR" << std::endl;
 }

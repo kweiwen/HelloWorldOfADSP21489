@@ -78,7 +78,6 @@ void initDAI(void)
 
     //BCLK's
     SRU(HIGH,PBEN08_I);//BLCK Output
-    SRU (HIGH, DAI_PB08_I);
     SRU (PCG_CLKA_O, DAI_PB08_I);//6.144MHZ
     SRU (PCG_CLKA_O, SPORT0_CLK_I);
     SRU (PCG_CLKA_O, SPORT1_CLK_I);
@@ -86,7 +85,6 @@ void initDAI(void)
 
     //LRCLK's
     SRU(HIGH,PBEN11_I);//LRCK Output
-    SRU (HIGH, DAI_PB11_I);//96K
     SRU (PCG_FSA_O, DAI_PB11_I);
     SRU (PCG_FSA_O, SPORT0_FS_I);
     SRU (PCG_FSA_O, SPORT0_FS_I);
