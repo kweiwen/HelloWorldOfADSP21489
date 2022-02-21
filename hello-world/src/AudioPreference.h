@@ -67,10 +67,10 @@ const int BLOCK_SIZE_512	= 512;
 
 #else
 #ifndef SR
-#define SR (SR_44K1)
+#define SR (SR_48K)
 #endif // !SR
 #ifndef INV_SR
-#define INV_SR (INV_SR_44K1)
+#define INV_SR (INV_SR_48K)
 #endif // !INV_SR
 
 #endif
