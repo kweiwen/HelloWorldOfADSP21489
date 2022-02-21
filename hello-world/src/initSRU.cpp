@@ -87,8 +87,8 @@ void initDAI(void)
     SRU(HIGH,PBEN11_I);//LRCK Output
     SRU (PCG_FSA_O, DAI_PB11_I);
     SRU (PCG_FSA_O, SPORT0_FS_I);
-    SRU (PCG_FSA_O, SPORT0_FS_I);
-    SRU (PCG_FSA_O, SPORT0_FS_I);
+    SRU (PCG_FSA_O, SPORT1_FS_I);
+    SRU (PCG_FSA_O, SPORT2_FS_I);
 
     //SDATA IN sport1 control register set up as a receiver in I2S
     SRU(DAI_PB09_O, SPORT1_DA_I);	//SDATA0 CN1²å²Û£¬IN A/B
