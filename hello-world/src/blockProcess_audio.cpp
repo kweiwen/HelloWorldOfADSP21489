@@ -73,8 +73,8 @@ void memcopy(float *input, float *output, unsigned int number)
 
 void process_audioBlocks()
 {
-    memcopy(fBlockB.Rx2_L1, fBlockB.Tx2_L1, NUM_SAMPLES);
-	memcopy(fBlockB.Rx2_R1, fBlockB.Tx2_R1, NUM_SAMPLES);
+    memcopy(fBlockB.Rx2_L, fBlockB.Tx2_L, NUM_SAMPLES);
+	memcopy(fBlockB.Rx2_R, fBlockB.Tx2_R, NUM_SAMPLES);
 
 	processSample(fBlockA.Rx_L, NUM_SAMPLES);
 }
@@ -102,8 +102,8 @@ void handleCodecData(unsigned int blockIndex)
     /* Float ADC data from CS4272 */
 	floatData(fBlockA.Rx_L, rx_block_pointer[blockIndex]+0, NUM_RX_SLOTS, NUM_SAMPLES);
 	floatData(fBlockA.Rx_R, rx_block_pointer[blockIndex]+1, NUM_RX_SLOTS, NUM_SAMPLES);
-	floatData(fBlockB.Rx2_L1, rx_block_pointer2[blockIndex]+0, NUM_RX_SLOTS, NUM_SAMPLES);
-	floatData(fBlockB.Rx2_R1, rx_block_pointer2[blockIndex]+1, NUM_RX_SLOTS, NUM_SAMPLES);
+	floatData(fBlockB.Rx2_L, rx_block_pointer2[blockIndex]+0, NUM_RX_SLOTS, NUM_SAMPLES);
+	floatData(fBlockB.Rx2_R, rx_block_pointer2[blockIndex]+1, NUM_RX_SLOTS, NUM_SAMPLES);
 
 	/* Place the audio processing algorithm here. */
 	process_audioBlocks();
@@ -111,8 +111,8 @@ void handleCodecData(unsigned int blockIndex)
     /* Fix DAC data for CS4272 */
 	fixData(tx_block_pointer[blockIndex]+0, fBlockA.Tx_L, NUM_TX_SLOTS, NUM_SAMPLES);
 	fixData(tx_block_pointer[blockIndex]+1, fBlockA.Tx_R, NUM_TX_SLOTS, NUM_SAMPLES);
-	fixData(tx_block_pointer2[blockIndex]+0, fBlockB.Tx2_L1, NUM_TX_SLOTS, NUM_SAMPLES);
-	fixData(tx_block_pointer2[blockIndex]+1, fBlockB.Tx2_R1, NUM_TX_SLOTS, NUM_SAMPLES);
+	fixData(tx_block_pointer2[blockIndex]+0, fBlockB.Tx2_L, NUM_TX_SLOTS, NUM_SAMPLES);
+	fixData(tx_block_pointer2[blockIndex]+1, fBlockB.Tx2_R, NUM_TX_SLOTS, NUM_SAMPLES);
 
     /* Clear the Processing Active Semaphore after processing is complete */
     isProcessing = 0;

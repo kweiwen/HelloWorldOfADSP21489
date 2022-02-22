@@ -26,10 +26,10 @@ typedef struct{
 } ad21479_float_data_1;
 
 typedef struct{
-	float Rx2_L1[NUM_SAMPLES];
-	float Rx2_R1[NUM_SAMPLES];
-	float Tx2_L1[NUM_SAMPLES];
-	float Tx2_R1[NUM_SAMPLES];
+	float Rx2_L[NUM_SAMPLES];
+	float Rx2_R[NUM_SAMPLES];
+	float Tx2_L[NUM_SAMPLES];
+	float Tx2_R[NUM_SAMPLES];
 } ad21479_float_data_2;
 
 void floatData(float *output, int *input, unsigned int instep, unsigned int length);

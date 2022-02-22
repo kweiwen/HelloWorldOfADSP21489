@@ -25,16 +25,6 @@ int main(void)
 	Init_SDRAM();
 	initDAI();
 
-   	SRU2(UART0_TX_O, DPI_PB07_I);	/* UART TX signal is connected to DPI pin 9 */
-	SRU2(HIGH, DPI_PBEN07_I);
-
-	SRU2(DPI_PB08_O, UART0_RX_I);	/* connect the pin buffer output signal to the UART0 RX */
-	SRU2(LOW, DPI_PB08_I);
-	SRU2(LOW, DPI_PBEN08_I);			/* disable DPI pin10 as input */
-
-	SRU2(LOW, DPI_PB14_I);
-	SRU2(HIGH, DPI_PBEN14_I);
-
 	/* init UART and install interrupt */
 	initUART();
     adi_int_InstallHandler(ADI_CID_P14I, UART0ISR, NULL, true);

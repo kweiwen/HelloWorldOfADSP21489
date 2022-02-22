@@ -28,11 +28,11 @@ int TCB_RxBlock_A1[4] = { NULL, sizeof(RxBlock_A0), 1, NULL};
 int TCB_TxBlock_A0[4] = { NULL, sizeof(TxBlock_A0), 1, NULL};
 int TCB_TxBlock_A1[4] = { NULL, sizeof(TxBlock_A0), 1, NULL};
 
-int TCB_RxBlock_B0[4] = { 0, sizeof(RxBlock_B0), 1, 0};
-int TCB_RxBlock_B1[4] = { 0, sizeof(RxBlock_B0), 1, 0};
+int TCB_RxBlock_B0[4] = { NULL, sizeof(RxBlock_B0), 1, NULL};
+int TCB_RxBlock_B1[4] = { NULL, sizeof(RxBlock_B0), 1, NULL};
 
-int TCB_TxBlock_B0[4] = { 0, sizeof(TxBlock_B0), 1, 0};
-int TCB_TxBlock_B1[4] = { 0, sizeof(TxBlock_B0), 1, 0};
+int TCB_TxBlock_B0[4] = { NULL, sizeof(TxBlock_B0), 1, NULL};
+int TCB_TxBlock_B1[4] = { NULL, sizeof(TxBlock_B0), 1, NULL};
 
 void initSPORT()
 {
@@ -92,8 +92,8 @@ void initSPORT()
     /* Block 1 will be filled first */
     /* Initialize the chain pointer for the transmitter with PCI bit set to enable the interrupts after every TCB */
     *pCPSP0A = (unsigned int)TCB_TxBlock_A0 - OFFSET + 3 + PCI;
-    *pCPSP0B = (unsigned int)TCB_TxBlock_B0 - OFFSET + 3 + PCI;
     *pCPSP1A = (unsigned int)TCB_RxBlock_A0 - OFFSET + 3;
+    *pCPSP0B = (unsigned int)TCB_TxBlock_B0 - OFFSET + 3 + PCI;
     *pCPSP1B = (unsigned int)TCB_RxBlock_B0 - OFFSET + 3;
    
 	/* SPORT1 control register is set up as a receiver in I2S for ADC1 and ADC2 */
