@@ -117,5 +117,5 @@ void initSPORT()
 
 	// sport0 control register set up as a transmitter in I2S
 	// sport 0 control register, SPCTL0 = 0x000C01F0 */
-	*pSPCTL0 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SPTRAN | SLEN32 |SPEN_B | SCHEN_B | SDEN_B;
+	*pSPCTL0 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SPTRAN | SLEN32 | SPEN_B | SCHEN_B | SDEN_B;
 }
