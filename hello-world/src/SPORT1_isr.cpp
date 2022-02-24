@@ -35,12 +35,10 @@ void ProcessingTooLong(void)
 
 void TalkThroughISR(uint32_t iid, void* handlerArg)
 {
-//    if(isProcessing)
-//        ProcessingTooLong();
+    if(isProcessing)
+        ProcessingTooLong();
     /*Increment the block pointer */
     buffer_cntr++;
     buffer_cntr %= 2;
     inputReady = 1;
-	Run_LED_Blink();
-//	std::cout << "TalkThroughISR" << std::endl;
 }
