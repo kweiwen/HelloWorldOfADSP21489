@@ -54,7 +54,6 @@ void initSPORT()
     TCB_RxBlock_A0[0] = (unsigned int) TCB_RxBlock_A1 + 3 - OFFSET + PCI ;
     TCB_RxBlock_A0[3] = (int) RxBlock_A0 - OFFSET ;
 
-
     //Proceed from Block A0 to Block A1
     TCB_TxBlock_A0[0] = (unsigned int) TCB_TxBlock_A1 + 3 - OFFSET ;
     TCB_TxBlock_A0[3] = (int) TxBlock_A0 - OFFSET ;
@@ -86,21 +85,18 @@ void initSPORT()
     
     //Clear out SPORT 0/1 registers
 	*pSPMCTL0 = 0;
-	*pSPMCTL1 = 0;
-    *pSPCTL0 = 0;
-    *pSPCTL1 = 0;
-    *pSPCTLN0 = 0;
-    *pSPCTLN1 = 0;
+	*pSPCTL0 = 0;
+	*pSPCTLN0 = 0;
 
-    *pSPMCTL2 = 0;
-    *pSPCTL2 = 0;
-    *pSPCTLN2 = 0;
+	*pSPMCTL1 = 0;
+    *pSPCTL1 = 0;
+    *pSPCTLN1 = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////
     //      Analog Input and output setup
     /////////////////////////////////////////////////////////////////////////////////////
    	*pDIV0 = 0x00000000;  // Transmitter (SPORT0)
-    *pDIV1 = 0x00000000;  // Receiver (SPORT1) at 24.576 MHz SCLK and 48 kHz sample rate
+    *pDIV1 = 0x00000000;  // Receiver (SPORT1) at 24.576 MHz SCLK and 96 kHz sample rate
 
 
 	// Enabling DMA Chaining for SPORT0 TX/SPORT1 RX
@@ -117,14 +113,9 @@ void initSPORT()
 	// sport1 control register set up as a receiver in I2S
 	// sport 1 control register SPCTL1 = 0x000C01F0
 	// externally generated SCLK1 and RFS1
-	*pSPCTL1 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SLEN32 |SPEN_B | SCHEN_B | SDEN_B | ICLK;
+	*pSPCTL1 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SLEN32 | SPEN_B | SCHEN_B | SDEN_B;
 
 	// sport0 control register set up as a transmitter in I2S
 	// sport 0 control register, SPCTL0 = 0x000C01F0 */
 	*pSPCTL0 = OPMODE | SPEN_A | SCHEN_A | SDEN_A | SPTRAN | SLEN32 |SPEN_B | SCHEN_B | SDEN_B;
-
-	/* SPORT2 control register set up as a transmitter in I2S for DAC3 and DAC4 */
-	/* externally generated SCLK2 and RFS2 */
-	/* primary and secondary channels enabled with DMA chaining */
-	*pSPCTL2 = (SPTRAN | OPMODE | SLEN24 | SPEN_A | SCHEN_A | SDEN_A | SPEN_B | SCHEN_B | SDEN_B); //SLEN32
 }
