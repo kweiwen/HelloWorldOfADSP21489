@@ -116,14 +116,6 @@ void initDAI(void)
 	SRU2(LOW,DPI_PB10_I);
 	SRU2(LOW,DPI_PBEN10_I);      // disables DPI pin7 as input
 
-	/*
-    SRU(LOW, DPI_PB08_I);
-	SRU(HIGH, DPI_PBEN08_I);
-
-    SRU(LOW, DPI_PB07_I);
-	SRU(HIGH, DPI_PBEN07_I);
-	*/
-
 }
 
 
