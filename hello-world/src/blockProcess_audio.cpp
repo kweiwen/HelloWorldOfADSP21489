@@ -1,7 +1,7 @@
-
 #include "Goble_Define.h"
 #include "blockProcess_audio.h"
 #include <sru21489.h>
+#include <math.h>
 
 
 // Structures to hold floating point data for each AD1939
@@ -57,22 +57,25 @@ void memcopy(float *input, float *output, unsigned int number)
     
     for(i = 0; i < number; i++)
     {
-        //output[i] = input[i];  //pitch shift *2.0
         output[i] = input[i];
     }
 }
 
-
-
 void process_audioBlocks()
 {
-	//DAC
+	/* ADC to DAC */
+    memcopy(fBlockA.Rx_L1, fBlockA.Tx_L1, NUM_SAMPLES);
+	memcopy(fBlockA.Rx_R1, fBlockA.Tx_R1, NUM_SAMPLES);
     memcopy(fBlockB.Rx2_L1, fBlockB.Tx2_L1, NUM_SAMPLES);
-	memcopy(fBlockB.Rx2_L1, fBlockB.Tx2_R1, NUM_SAMPLES);
+	memcopy(fBlockB.Rx2_R1, fBlockB.Tx2_R1, NUM_SAMPLES);
+
+	/* doing something takes amount of time here */
+	for(int i = 0; i < 8192; i++)
+	{
+		float a = (i + 1) * (i + 1);
+		float b = sqrtf(a);
+	}
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 // This function handles the Codec data in the following 3 steps...
