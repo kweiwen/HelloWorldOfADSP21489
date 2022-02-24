@@ -65,6 +65,7 @@ void initDAI(void)
 {
 
     clearDAIpins();
+
     SRU(LOW, DAI_PB02_I);//DAI_P2 24.576MHZ Audio CLK OSC Input
 
     SRU(LOW, DAI_PB09_I);//CN1 SDATA0 Input A/B
@@ -81,14 +82,12 @@ void initDAI(void)
     SRU (PCG_CLKA_O, DAI_PB08_I);//6.144MHZ
     SRU (PCG_CLKA_O, SPORT0_CLK_I);
     SRU (PCG_CLKA_O, SPORT1_CLK_I);
-    SRU (PCG_CLKA_O, SPORT2_CLK_I);
 
     //LRCLK's
     SRU(HIGH,PBEN11_I);//LRCK Output
     SRU (PCG_FSA_O, DAI_PB11_I);
     SRU (PCG_FSA_O, SPORT0_FS_I);
     SRU (PCG_FSA_O, SPORT1_FS_I);
-    SRU (PCG_FSA_O, SPORT2_FS_I);
 
     //SDATA IN sport1 control register set up as a receiver in I2S
     SRU(DAI_PB09_O, SPORT1_DA_I);	//SDATA0 CN1²å²Û£¬IN A/B
