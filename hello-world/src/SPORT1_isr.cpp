@@ -14,6 +14,7 @@
 */
 #include <sys/platform.h>
 #include <iostream>
+#include <stdint.h>
 #include "SPORT1_isr.h"
 #include "hw_connect.h"
 
@@ -41,5 +42,5 @@ void TalkThroughISR(uint32_t iid, void* handlerArg)
     buffer_cntr %= 2;
     inputReady = 1;
 	Run_LED_Blink();
-	std::cout << "TalkThroughISR" << std::endl;
+//	std::cout << "TalkThroughISR" << std::endl;
 }
