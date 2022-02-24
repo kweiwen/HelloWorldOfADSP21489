@@ -10,7 +10,7 @@
 
 void Run_LED_Blink(void)
 {
-	static Flag = 0;
+	static int Flag = 0;
 	if(Flag){
 		_Run_LED_On();
 		Flag = 0;
