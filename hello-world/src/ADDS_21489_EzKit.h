@@ -13,8 +13,8 @@
 #define NUM_TX_SLOTS 2
 
 /* Size of each channel */
-#define RX_BLOCK_SIZE (NUM_SAMPLES * NUM_RX_SLOTS)
-#define TX_BLOCK_SIZE (NUM_SAMPLES * NUM_TX_SLOTS)
+#define RX_BLOCK_SIZE (BLOCK_SIZE * NUM_RX_SLOTS)
+#define TX_BLOCK_SIZE (BLOCK_SIZE * NUM_TX_SLOTS)
 
 #define SPIB_MODE (CPHASE | CLKPL)
 

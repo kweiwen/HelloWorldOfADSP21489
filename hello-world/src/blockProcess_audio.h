@@ -1,14 +1,5 @@
 #pragma once
-
-/* Block Size per Audio Channel*/
-#define NUM_SAMPLES 128
-
-/* Number of stereo channels*/
-#define NUM_RX_SLOTS 2
-#define NUM_TX_SLOTS 2
-
-#define RX_BLOCK_SIZE (NUM_SAMPLES*NUM_RX_SLOTS)
-#define TX_BLOCK_SIZE (NUM_SAMPLES*NUM_TX_SLOTS)
+#include "ADDS_21489_EzKit.h"
 
 /* Define a structure to represent buffers for all 8 floating-point
  * data channels of the AD21489 */

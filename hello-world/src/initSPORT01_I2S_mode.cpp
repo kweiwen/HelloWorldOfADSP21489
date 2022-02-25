@@ -1,21 +1,6 @@
 #include <platform_include.h>      /* System and IOP register bit and address definitions. */
 #include "initSPORT01_I2S_mode.h"
-
-/* Block Size per Audio Channel*/
-#define NUM_SAMPLES 128
-
-/* Number of stereo channels*/
-#define NUM_RX_SLOTS 2
-#define NUM_TX_SLOTS 2
-
-#define RX_BLOCK_SIZE (NUM_SAMPLES*NUM_RX_SLOTS)
-#define TX_BLOCK_SIZE (NUM_SAMPLES*NUM_TX_SLOTS)
-
-#define PCI  0x00080000
-#define OFFSET 0x00080000
-#define OFFSET_MASK 0x7FFFF
-
-
+#include "ADDS_21489_EzKit.h"
 
 // SPORT RX DMA destination buffers
 int RxBlock_A0[RX_BLOCK_SIZE];

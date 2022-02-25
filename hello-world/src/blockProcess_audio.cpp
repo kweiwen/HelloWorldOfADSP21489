@@ -1,5 +1,5 @@
-#include "Goble_Define.h"
 #include "blockProcess_audio.h"
+#include "ADDS_21489_EzKit.h"
 #include <sru21489.h>
 #include <math.h>
 

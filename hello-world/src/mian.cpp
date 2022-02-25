@@ -1,10 +1,10 @@
 #include <sys/platform.h>
 #include <iostream>
+#include "ADDS_21489_EzKit.h"
 #include "init_PLL_SDRAM.h"
 #include "initSRU.h"
 #include <sru.h>
 #include <services/int/adi_int.h>
-#include "Goble_Define.h"
 #include "hw_connect.h"
 #include "UART0_isr.h"
 #include "initSPORT01_I2S_mode.h"
