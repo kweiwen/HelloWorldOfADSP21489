@@ -109,12 +109,12 @@ void initDAI(void)
 	SRU2(HIGH, DPI_PBEN13_I);
 
 	//UART0
-	SRU2(UART0_TX_O,DPI_PB09_I); // UART transmit signal is connected to DPI pin8 /MOSI
-	SRU2(HIGH,DPI_PBEN09_I);
+	SRU2(UART0_TX_O,DPI_PB08_I); // UART transmit signal is connected to DPI pin8 /MOSI
+	SRU2(HIGH,DPI_PBEN08_I);
 
-	SRU2(DPI_PB10_O,UART0_RX_I); // connect the pin buffer output signal to the UART0 receive / MISO
-	SRU2(LOW,DPI_PB10_I);
-	SRU2(LOW,DPI_PBEN10_I);      // disables DPI pin7 as input
+	SRU2(DPI_PB07_O,UART0_RX_I); // connect the pin buffer output signal to the UART0 receive / MISO
+	SRU2(LOW,DPI_PB07_I);
+	SRU2(LOW,DPI_PBEN07_I);      // disables DPI pin7 as input
 
 }
 
