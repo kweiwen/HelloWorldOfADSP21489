@@ -43,6 +43,10 @@ int main(void)
 	initSPORT();
 	adi_int_InstallHandler(ADI_CID_P3I, TalkThroughISR, 0, true);
 
+	_Codec_Reset_L();
+	Delay_Cycles(10000000);//248ms,10000000 = 248ms 24.8nS per Cycle
+	_Codec_Reset_H();
+
 	std::cout << "Hello, World!" << std::endl;
 	DBG(welcomemessage);
 
