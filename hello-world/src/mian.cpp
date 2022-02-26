@@ -44,7 +44,7 @@ int main(void)
 	adi_int_InstallHandler(ADI_CID_P3I, TalkThroughISR, 0, true);
 
 	_Codec_Reset_L();
-	Delay_Cycles(10000000);//248ms,10000000 = 248ms 24.8nS per Cycle
+	Delay_Cycles(10000000);//248ms,10000000 = 248ms @ 400MHZ CCLK*/
 	_Codec_Reset_H();
 
 	std::cout << "Hello, World!" << std::endl;
@@ -61,9 +61,9 @@ int main(void)
 
     	if(inputReady)
     	{
-    		SRU2(HIGH, DPI_PB14_I);
+    		//SRU2(HIGH, DPI_PB14_I);
     		handleCodecData(buffer_cntr);
-    		SRU2(LOW, DPI_PB14_I);
+    		//SRU2(LOW, DPI_PB14_I);
     	}
 
     	if(commandReady)
@@ -78,14 +78,14 @@ int main(void)
 
 void Delay_Cycles(unsigned int delayCount)
 {
-	/* delayCount = 1 => 24.8nS delay */
+	/* delayCount = 1 => 24.8nS delay @ 400MHZ CCLK*/
 	while(delayCount--);
 }
 
 
 void Codec_Reset(void)
 {
-	/* delayCount = 1 => 38ns delay */
+	/* delayCount = 1 => 24.8nS delay @ 400MHZ CCLK*/
     _Codec_Reset_H();
     Delay_Cycles(5);
 	_Codec_Reset_L();

@@ -30,12 +30,14 @@ volatile int isProcessing = 0;
 /* If the processing takes too long, the program will be stuck in this infinite loop. */
 void ProcessingTooLong(void)
 {
-    while(1);
+    //while(1);
+	std::cout << "ProcessingTooLong" << std::endl;
 }
 
 void TalkThroughISR(uint32_t iid, void* handlerArg)
 {
-    if(isProcessing)
+	Run_LED_Blink();
+	if(isProcessing)
         ProcessingTooLong();
     /*Increment the block pointer */
     buffer_cntr++;
