@@ -12,7 +12,6 @@
 #include "blockProcess_audio.h"
 #include "init_PCG.h"
 
-
 void Delay_Cycles(unsigned int delayCount);
 void Codec_Reset(void);
 
