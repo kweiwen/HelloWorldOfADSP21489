@@ -2,6 +2,10 @@
 #include "ADDS_21489_EzKit.h"
 #include <sru21489.h>
 #include <math.h>
+#include <cycle_count.h>	//For Basic Cycle Count
+#include <cycles.h>		//For Cycle Count With Statistics
+#include <time.h> 		//For Cycle Count Using Time
+#include <stdio.h>
 
 
 // Structures to hold floating point data for each AD1939
@@ -88,12 +92,19 @@ void process_audioBlocks()
 
 void handleCodecData(unsigned int blockIndex)
 {
+	 volatile clock_t clock_start;
+	 volatile clock_t clock_stop;
+	 double secs;
+
+
+	clock_start = clock();
+
     //Clear the Block Ready Semaphore
     inputReady = 0;
     //Set the Processing Active Semaphore before starting processing
     isProcessing = 1;
 
-    // Float ADC data from AD21479
+    // Float ADC data from Codec
 	floatData(fBlockA.Rx_L1, rx_block_pointer[blockIndex]+0, NUM_RX_SLOTS, NUM_SAMPLES);
 	floatData(fBlockA.Rx_R1, rx_block_pointer[blockIndex]+1, NUM_RX_SLOTS, NUM_SAMPLES);
 	floatData(fBlockB.Rx2_L1, rx_block_pointer2[blockIndex]+0, NUM_RX_SLOTS, NUM_SAMPLES);
@@ -102,7 +113,7 @@ void handleCodecData(unsigned int blockIndex)
 	// Place the audio processing algorithm here. 
 	process_audioBlocks();
 
-    // Fix DAC data for AD1939
+    // Fix DAC data for Codec
 	fixData(tx_block_pointer[blockIndex]+0, fBlockA.Tx_L1, NUM_TX_SLOTS, NUM_SAMPLES);
 	fixData(tx_block_pointer[blockIndex]+1, fBlockA.Tx_R1, NUM_TX_SLOTS, NUM_SAMPLES);
 	fixData(tx_block_pointer2[blockIndex]+0, fBlockB.Tx2_L1, NUM_TX_SLOTS, NUM_SAMPLES);
@@ -110,5 +121,9 @@ void handleCodecData(unsigned int blockIndex)
 
     //Clear the Processing Active Semaphore after processing is complete
     isProcessing = 0;
+
+    clock_stop = clock();
+    secs = ((double) ((clock_stop - clock_start)) / CLOCKS_PER_SEC)*1e6;
+    printf("Time taken was %e us\n",secs);
 }
 
