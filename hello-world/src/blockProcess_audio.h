@@ -21,3 +21,5 @@ void floatData(float *output, int *input, unsigned int instep, unsigned int leng
 void fixData(int *output, float *input, unsigned int outstep, unsigned int length);
 void process_audioBlocks(void);
 void handleCodecData(unsigned int blockIndex);
+
+#define total_block_time_sec	(float)(INV_SR*BLOCK_SIZE)
