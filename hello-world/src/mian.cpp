@@ -62,9 +62,7 @@ int main(void)
 
     	if(inputReady)
     	{
-    		//SRU2(HIGH, DPI_PB14_I);
     		handleCodecData(buffer_cntr);
-    		//SRU2(LOW, DPI_PB14_I);
     	}
 
     	if(commandReady)

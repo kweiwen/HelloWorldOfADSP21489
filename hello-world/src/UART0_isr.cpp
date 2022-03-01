@@ -106,6 +106,7 @@ void xmitUARTmessage(char*xmit, int SIZE)
 
 void xmitUARTmessage_DMA(char*xmit, int SIZE)
 {
+	//執行一次DMA發送需要大約消耗400ns,不論字長
 	*pUART0TXCTL = 0;
 	*pIIUART0TX = (unsigned int)xmit;
 	*pIMUART0TX = 1;
