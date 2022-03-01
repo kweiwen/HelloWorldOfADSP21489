@@ -32,6 +32,8 @@ int *tx_block_pointer[2] = {TxBlock_A0, TxBlock_A1};
 int *rx_block_pointer2[2] = {RxBlock_B0, RxBlock_B1};
 int *tx_block_pointer2[2] = {TxBlock_B0, TxBlock_B1};
 
+volatile float CoreLoad;
+
 // Unoptimized function to convert the incoming fixed-point data to 32-bit floating-point format.
 // This function assumes that the incoming fixed point data is in 1.31 format
 void floatData(float *output, int *input, unsigned int instep, unsigned int length)
@@ -93,10 +95,9 @@ void process_audioBlocks()
 
 void handleCodecData(unsigned int blockIndex)
 {
-	 volatile clock_t clock_start;
-	 volatile clock_t clock_stop;
-	 double secs;
-	 float percent;
+	volatile clock_t clock_start;
+	volatile clock_t clock_stop;
+	double secs;
 	_Run_LED_On();
 	clock_start = clock();
 
@@ -126,11 +127,10 @@ void handleCodecData(unsigned int blockIndex)
     clock_stop = clock();
     _Run_LED_Off();
     secs = ((double) ((clock_stop - clock_start)) / CLOCKS_PER_SEC);
-    percent = secs / total_block_time_sec;
+    CoreLoad = secs / total_block_time_sec;
 
     //printf("Processing Time = %0.2fus\n",secs*1e6);
     //printf("Total Block Time = %0.2fus\n",total_block_time_sec*1e6);
-    printf("DSP Load = %0.2f%%\n",percent*100);
-
+    //printf("DSP Load = %0.2f%%\n",percent*100);
 }
 

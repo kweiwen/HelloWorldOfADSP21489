@@ -103,6 +103,17 @@ void xmitUARTmessage(char*xmit, int SIZE)
 	}
 }
 
+
+void xmitUARTmessage_DMA(char*xmit, int SIZE)
+{
+	*pUART0TXCTL = 0;
+	*pIIUART0TX = (unsigned int)xmit;
+	*pIMUART0TX = 1;
+	*pCUART0TX = SIZE;
+	*pUART0TXCTL = UARTEN | UARTDEN;
+};
+
+
 #pragma optimize_for_speed /* interrupt handlers usually need to be optimized */
 #pragma section ("seg_int_code")  /* handler functions perform better in internal memory */
 void UART0ISR(uint32_t iid, void *handlerArg)
@@ -197,7 +208,8 @@ void DBG(char* input_data)
 	{
 		index++;
 	}
-	xmitUARTmessage(input_data, index+1);
+	//xmitUARTmessage(input_data, index+1);
+	xmitUARTmessage_DMA(input_data, index+1);
 }
 
 
