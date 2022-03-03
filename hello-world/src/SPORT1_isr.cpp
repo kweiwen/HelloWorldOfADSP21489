@@ -36,7 +36,6 @@ void ProcessingTooLong(void)
 
 void TalkThroughISR(uint32_t iid, void* handlerArg)
 {
-	Run_LED_Blink();
 	if(isProcessing)
         ProcessingTooLong();
     /*Increment the block pointer */

@@ -1,5 +1,6 @@
 #include "blockProcess_audio.h"
 #include "ADDS_21489_EzKit.h"
+#include "hw_connect.h"
 #include <sru21489.h>
 #include <math.h>
 #include <cycle_count.h>	//For Basic Cycle Count
@@ -30,6 +31,8 @@ int *rx_block_pointer[2] = {RxBlock_A0, RxBlock_A1};
 int *tx_block_pointer[2] = {TxBlock_A0, TxBlock_A1};
 int *rx_block_pointer2[2] = {RxBlock_B0, RxBlock_B1};
 int *tx_block_pointer2[2] = {TxBlock_B0, TxBlock_B1};
+
+volatile float CoreLoad;
 
 // Unoptimized function to convert the incoming fixed-point data to 32-bit floating-point format.
 // This function assumes that the incoming fixed point data is in 1.31 format
@@ -76,8 +79,8 @@ void process_audioBlocks()
 	/* doing something takes amount of time here */
 	for(int i = 0; i < 8192; i++)
 	{
-		float a = (i + 1) * (i + 1);
-		float b = sqrtf(a);
+	//	float a = (i + 1) * (i + 1);
+	//	float b = sqrtf(a);
 	}
 }
 
@@ -92,11 +95,10 @@ void process_audioBlocks()
 
 void handleCodecData(unsigned int blockIndex)
 {
-	 volatile clock_t clock_start;
-	 volatile clock_t clock_stop;
-	 double secs;
-
-
+	volatile clock_t clock_start;
+	volatile clock_t clock_stop;
+	double secs;
+	_Run_LED_On();
 	clock_start = clock();
 
     //Clear the Block Ready Semaphore
@@ -123,7 +125,12 @@ void handleCodecData(unsigned int blockIndex)
     isProcessing = 0;
 
     clock_stop = clock();
-    secs = ((double) ((clock_stop - clock_start)) / CLOCKS_PER_SEC)*1e6;
-    printf("Time taken was %e us\n",secs);
+    _Run_LED_Off();
+    secs = ((double) ((clock_stop - clock_start)) / CLOCKS_PER_SEC);
+    CoreLoad = secs / total_block_time_sec;
+
+    //printf("Processing Time = %0.2fus\n",secs*1e6);
+    //printf("Total Block Time = %0.2fus\n",total_block_time_sec*1e6);
+    //printf("DSP Load = %0.2f%%\n",percent*100);
 }
 

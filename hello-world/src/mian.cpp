@@ -28,6 +28,7 @@ char welcomemessage[] = {"\fHello! \n\r"
 
 extern volatile int timer_isr_count;
 extern volatile int commandReady;
+extern volatile float CoreLoad;
 extern char uart_buffer[];
 int main(void)
 {
@@ -61,18 +62,19 @@ int main(void)
 
     	if(inputReady)
     	{
-    		//SRU2(HIGH, DPI_PB14_I);
     		handleCodecData(buffer_cntr);
-    		//SRU2(LOW, DPI_PB14_I);
     	}
 
     	if(commandReady)
     	{
-			xmitUARTmessage(uart_buffer, 8);
+    		char str[128];
+    		sprintf(str, "CoreLoad=%0.2f%%", CoreLoad*100);
+    	    xmitUARTmessage_DMA(str, strlen(str));
+
+			//xmitUARTmessage_DMA(uart_buffer, 8);
     		commandReady = 0;
     	}
 	}
-
 	return 0;
 }
 
