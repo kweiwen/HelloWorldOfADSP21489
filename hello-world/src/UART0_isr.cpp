@@ -8,7 +8,7 @@
 
 
 #ifndef UART_BUFFER_SIZE
-	#define UART_BUFFER_SIZE (8)
+	#define UART_BUFFER_SIZE (16)
 #endif
 
 #ifndef UART_BUFFER_MASK
@@ -26,6 +26,7 @@ volatile int isCommandProcessing = 0;
 volatile int uart_buffer_cntr = 0;
 volatile int uart_buffer_ready = 0;
 volatile int timer_isr_count = 0;
+volatile int uart_rx_len = 0;
 static void Init_UART_Baud(int baud,int Len,char Party,int Stop);
 
 char welcomeMessage[] =
@@ -150,8 +151,10 @@ void UART0ISR(uint32_t iid, void *handlerArg)
 		value = *pUART0RBR;
 		uart_buffer[uart_buffer_cntr++] = value;
 		uart_buffer_cntr &= UART_BUFFER_MASK;
+		uart_rx_len = uart_buffer_cntr;
 
 		/* once the buffer is full transmit the message to UART TX */
+		/*
 		if(uart_buffer_cntr==0)
 		{
 			timer_off();
@@ -161,11 +164,14 @@ void UART0ISR(uint32_t iid, void *handlerArg)
 		}
 		else
 		{
-			/* Set tperiod and tcount of the timer. */
+			// Set tperiod and tcount of the timer.
 			timer_set(1000, 1000);
-			/* Start the timer. */
+			// Start the timer.
 			timer_on();
 		}
+		*/
+		timer_set(1000, 1000);
+		timer_on();
 	}
 } /* UART0ISR */
 
@@ -196,6 +202,7 @@ void TimerISR(uint32_t iid, void* handlerArg)
 		uart_buffer_ready = 0;
 		uart_buffer_cntr = 0;
 		timer_isr_count = 0;
+		commandReady = 1;
 		/* we should add an error flag here */
 	}
 

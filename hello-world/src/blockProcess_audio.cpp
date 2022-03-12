@@ -1,5 +1,6 @@
 #include "blockProcess_audio.h"
 #include "ADDS_21489_EzKit.h"
+#include "RMS.h"
 #include "hw_connect.h"
 #include <sru21489.h>
 #include <math.h>
@@ -72,10 +73,10 @@ void process_audioBlocks()
 {
 	/* ADC to DAC */
     memcopy(fBlockA.Rx_L1, fBlockA.Tx_L1, NUM_SAMPLES);
-	memcopy(fBlockA.Rx_R1, fBlockA.Tx_R1, NUM_SAMPLES);
-    memcopy(fBlockB.Rx2_L1, fBlockB.Tx2_L1, NUM_SAMPLES);
-	memcopy(fBlockB.Rx2_R1, fBlockB.Tx2_R1, NUM_SAMPLES);
-
+	//memcopy(fBlockA.Rx_R1, fBlockA.Tx_R1, NUM_SAMPLES);
+    //memcopy(fBlockB.Rx2_L1, fBlockB.Tx2_L1, NUM_SAMPLES);
+	//memcopy(fBlockB.Rx2_R1, fBlockB.Tx2_R1, NUM_SAMPLES);
+	Get_RMS_Voltage(fBlockB.Rx2_R1, NUM_SAMPLES);
 	/* doing something takes amount of time here */
 	for(int i = 0; i < 8192; i++)
 	{

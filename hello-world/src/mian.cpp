@@ -11,7 +11,7 @@
 #include "SPORT1_isr.h"
 #include "blockProcess_audio.h"
 #include "init_PCG.h"
-
+#include "AT.h"
 
 void Delay_Cycles(unsigned int delayCount);
 void Codec_Reset(void);
@@ -30,6 +30,9 @@ extern volatile int timer_isr_count;
 extern volatile int commandReady;
 extern volatile float CoreLoad;
 extern char uart_buffer[];
+extern volatile int uart_rx_len;
+extern float rms_ch1;;
+char X;
 int main(void)
 {
  	Init_PLL();
@@ -67,12 +70,18 @@ int main(void)
 
     	if(commandReady)
     	{
-    		char str[128];
-    		sprintf(str, "CoreLoad=%0.2f%%", CoreLoad*100);
-    	    xmitUARTmessage_DMA(str, strlen(str));
+    		std::cout << "commandReady" << std::endl;
 
-			//xmitUARTmessage_DMA(uart_buffer, 8);
+    		char str[128];
+    		//sprintf(str, "CoreLoad=%0.2f%%", CoreLoad*100);
+    		//sprintf(str, "ch1 input=%0.5fV",rms_ch1);
+    		//xmitUARTmessage_DMA(str, strlen(str));
+
+			//xmitUARTmessage_DMA(uart_buffer, uart_rx_len);
+    		X = at_cmd_parse(uart_buffer, uart_rx_len);
     		commandReady = 0;
+    		uart_rx_len = 0;
+    		printf("at_cmd_parse = %x\n",X);
     	}
 	}
 	return 0;
